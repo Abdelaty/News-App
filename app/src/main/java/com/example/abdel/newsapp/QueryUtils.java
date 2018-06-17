@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QueryUtils {
-    /**
-     * URL for earthquake data from the USGS dataset
-     */
+
+    private static final String RESPONSE = "response";
+    private static final String RESULTS = "results";
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     private QueryUtils() {
@@ -145,8 +145,7 @@ public class QueryUtils {
 
             // Extract the JSONArray associated with the key called "responses",
             // which represents a list of responses (or news).
-            JSONArray newsArray = baseJsonResponse.getJSONArray("response");
-
+            JSONArray newsArray = baseJsonResponse.getJSONObject(RESPONSE).getJSONArray(RESULTS);
             // For each news in the newsArray, create an {@link News} object
             for (int i = 0; i < newsArray.length(); i++) {
 
@@ -156,20 +155,25 @@ public class QueryUtils {
                 // For a given News, extract the JSONObject associated with the
                 // key called "results", which represents a list of all results
                 // for that news.
-                JSONObject results = currentNews.getJSONObject("results");
+                //JSONObject results = currentNews.getJSONObject("results");
 
+
+
+                // Extract the value for the key called "webTitle"
+                String title = currentNews.getString("webTitle");
+
+                // Extract the value for the key called "webTitle"
+                String section = currentNews.getString("sectionName");
 
                 // Extract the value for the key called "time"
-                String time = results.getString("webPublicationDate");
-                // Extract the value for the key called "webTitle"
-                String title = results.getString("webTitle");
+                String time = currentNews.getString("webPublicationDate");
 
                 // Extract the value for the key called "apiUrl"
-                String url = results.getString("apiUrl");
+                String url = currentNews.getString("webUrl");
 
                 // Create a new {@link Earthquake} object with the Title, time
                 // and url from the JSON response.
-                NewsData guardianNews = new NewsData(time, title, url);
+                NewsData guardianNews = new NewsData(title,section, time, url);
 
                 // Add the new {@link News} to the list of news.
                 news.add(guardianNews);
@@ -179,7 +183,7 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the News JSON results", e);
         }
 
         // Return the list of news

@@ -3,4 +3,5 @@
     <string name="no_news">No News </string>
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">No internet connection.</string>
+    <string name="title_font">sans-serif-medium</string>
 </resources>

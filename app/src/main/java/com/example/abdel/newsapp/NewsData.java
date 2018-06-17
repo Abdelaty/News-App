@@ -1,19 +1,22 @@
 package com.example.abdel.newsapp;
 
 public class NewsData {
-    private String mTitle, mUrl, mTime;
-    private int mImage;
+    private String mTitle, mUrl, mTime,mSection;
 
-    public NewsData(String title, String time, String url) {
+    public NewsData(String title,String section, String time, String url) {
         mTime = time;
         mTitle = title;
         mUrl = url;
+        mSection=section;
     }
 
 
     /**
-     * Get the News Content
+     * Get the News section
      */
+    public String getSection() {
+        return mSection;
+    }
 
     public String getTime() {
         return mTime;

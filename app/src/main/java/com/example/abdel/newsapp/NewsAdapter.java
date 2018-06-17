@@ -4,11 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
 
-public class NewsAdapter {
+public class NewsAdapter  extends ArrayAdapter<NewsData> {
     /**
      * Constructs a new {@link NewsAdapter}.
      *
@@ -40,6 +41,11 @@ public class NewsAdapter {
         String title = currentNews.getTitle();
         // Display the title of the current news in that TextView
         titleView.setText(title);
+
+        TextView sectionView = listItemView.findViewById(R.id.section_view);
+        String section = currentNews.getSection();
+        // Display the title of the current news in that TextView
+        sectionView.setText(section);
 
         // Find the TextView with view ID titleView
         TextView dateView = listItemView.findViewById(R.id.time_view);

@@ -22,7 +22,6 @@ import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -79,8 +78,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new NewsAdapter(this, new ArrayList<NewsData>());
         newsListView.setEmptyView(mEmptyStateTextView);
         newsListView.setAdapter((ListAdapter) mAdapter);
-        NewsAsyncTask task = new NewsAsyncTask();
-        task.execute(News_REQUEST_URL);
+        //   NewsAsyncTask task = new NewsAsyncTask();
+        //   task.execute(News_REQUEST_URL);
         newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -123,7 +122,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter.clear();
     }
 
-    class NewsAsyncTask extends AsyncTask<String, Void, List<NewsData>> {
+   /* class NewsAsyncTask extends AsyncTask<String, Void, List<NewsData>> {
 
         @Override
         protected List<NewsData> doInBackground(String... urls) {
@@ -143,9 +142,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             // data set. This will trigger the ListView to update.
             if (data != null && !data.isEmpty()) {
                 mAdapter.addAll(data);
-            }
-        }
-
-
-    }
+            }*/
 }
+
+
+
