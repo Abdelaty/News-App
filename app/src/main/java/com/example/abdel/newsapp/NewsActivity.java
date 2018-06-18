@@ -19,11 +19,15 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -37,9 +41,17 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String LOG_TAG = NewsActivity.class.getName();
     private static final String News_REQUEST_URL = "https://content.guardianapis.com/search?api-key=134f6a2b-c8f9-42a2-a66c-5c4eb2cbba5b";
     private static final int News_LOADER_ID = 1;
-
     private NewsAdapter mAdapter;
     private TextView mEmptyStateTextView;
+
+    @Override
+    // This method initialize the contents of the Activity's options menu.
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options Menu we specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +110,30 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
     @Override
     public Loader<List<NewsData>> onCreateLoader(int i, Bundle bundle) {
-        return new NewsLoader(this, News_REQUEST_URL);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+
+
+        Uri baseUri = Uri.parse(News_REQUEST_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("order-by", orderBy);
+
+        return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -122,27 +155,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter.clear();
     }
 
-   /* class NewsAsyncTask extends AsyncTask<String, Void, List<NewsData>> {
-
-        @Override
-        protected List<NewsData> doInBackground(String... urls) {
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-
-            }
-            List<NewsData> result = QueryUtils.fetchNewsData(urls[0]);
-            return result;
-        }
-
-        protected void onPostExecute(List<NewsData> data) {
-            // Clear the adapter of previous earthquake data
-            mAdapter.clear();
-
-            // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
-            // data set. This will trigger the ListView to update.
-            if (data != null && !data.isEmpty()) {
-                mAdapter.addAll(data);
-            }*/
 }
 
 
