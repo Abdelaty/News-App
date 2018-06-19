@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class NewsAdapter  extends ArrayAdapter<NewsData> {
+public class NewsAdapter extends ArrayAdapter<NewsData> {
     /**
      * Constructs a new {@link NewsAdapter}.
      *
@@ -42,6 +42,14 @@ public class NewsAdapter  extends ArrayAdapter<NewsData> {
         // Display the title of the current news in that TextView
         titleView.setText(title);
 
+
+        // Find the TextView with view ID nameView
+        TextView nameView = listItemView.findViewById(R.id.name_view);
+        String name = currentNews.getAuthorName();
+        // Display the date of the current news in that TextView
+        nameView.setText(name);
+
+
         TextView sectionView = listItemView.findViewById(R.id.section_view);
         String section = currentNews.getSection();
         // Display the title of the current news in that TextView
@@ -52,6 +60,7 @@ public class NewsAdapter  extends ArrayAdapter<NewsData> {
         String date = currentNews.getTime();
         // Display the date of the current news in that TextView
         dateView.setText(date);
+
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;

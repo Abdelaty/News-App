@@ -39,7 +39,8 @@ import java.util.List;
 
 public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<NewsData>> {
     public static final String LOG_TAG = NewsActivity.class.getName();
-    private static final String News_REQUEST_URL = "https://content.guardianapis.com/search?api-key=134f6a2b-c8f9-42a2-a66c-5c4eb2cbba5b";
+    private static final String News_REQUEST_URL = "https://content.guardianapis.com/search";
+    //        "?api-key=134f6a2b-c8f9-42a2-a66c-5c4eb2cbba5b";
     private static final int News_LOADER_ID = 1;
     private NewsAdapter mAdapter;
     private TextView mEmptyStateTextView;
@@ -86,12 +87,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         ListView newsListView = findViewById(R.id.listView);
-// Create a fake list of News.
+        // Create a fake list of News.
         mAdapter = new NewsAdapter(this, new ArrayList<NewsData>());
         newsListView.setEmptyView(mEmptyStateTextView);
         newsListView.setAdapter((ListAdapter) mAdapter);
-        //   NewsAsyncTask task = new NewsAsyncTask();
-        //   task.execute(News_REQUEST_URL);
         newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -132,7 +131,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         Uri baseUri = Uri.parse(News_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
         uriBuilder.appendQueryParameter("order-by", orderBy);
-
+        uriBuilder.appendQueryParameter("show-fields", "byline");
+        uriBuilder.appendQueryParameter("api-key", "134f6a2b-c8f9-42a2-a66c-5c4eb2cbba5b");
         return new NewsLoader(this, uriBuilder.toString());
     }
 

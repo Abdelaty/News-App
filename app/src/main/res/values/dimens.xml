@@ -4,4 +4,5 @@
     <dimen name="padding">16dp</dimen>
     <dimen name="title_height">36dp</dimen>
     <dimen name="title_size">16sp</dimen>
+    <dimen name="name_width">100dp</dimen>
 </resources>

@@ -23,6 +23,9 @@ public class QueryUtils {
     private static final String RESPONSE = "response";
     private static final String RESULTS = "results";
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+    private static final int readTimeout = 10000;
+    private static final int connectTimeOut = 15000;
+    private static final int defaultResponseCode = 200;
 
     private QueryUtils() {
     }
@@ -49,7 +52,7 @@ public class QueryUtils {
         // Extract relevant fields from the JSON response and create a list of {@link news}s
         List<NewsData> news = extractFeatureFromJson(jsonResponse);
 
-        // Return the list of {@link Earthquake}s
+        // Return the list of {@link news}
         return news;
 
     }
@@ -87,11 +90,11 @@ public class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(readTimeout /* milliseconds */);
+            urlConnection.setConnectTimeout(connectTimeOut /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == defaultResponseCode) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
@@ -155,25 +158,35 @@ public class QueryUtils {
                 // For a given News, extract the JSONObject associated with the
                 // key called "results", which represents a list of all results
                 // for that news.
-                //JSONObject results = currentNews.getJSONObject("results");
-
 
 
                 // Extract the value for the key called "webTitle"
                 String title = currentNews.getString("webTitle");
 
-                // Extract the value for the key called "webTitle"
+
+                //  String name = currentNews.getString("pillarName");
+
+
+                // Extract the value for the key called "sectionName"
                 String section = currentNews.getString("sectionName");
 
                 // Extract the value for the key called "time"
                 String time = currentNews.getString("webPublicationDate");
 
-                // Extract the value for the key called "apiUrl"
+                // Extract the value for the key called "Url"
                 String url = currentNews.getString("webUrl");
 
-                // Create a new {@link Earthquake} object with the Title, time
+                String name = "No author name";
+                try {
+                    JSONObject fields = currentNews.getJSONObject("fields");
+                    if (fields.has("byline")) {
+                        name = fields.getString("byline");
+                    }
+                } catch (Exception ex) {
+                }
+                // Create a new {@link News} object with the Title, time, url, authorName
                 // and url from the JSON response.
-                NewsData guardianNews = new NewsData(title,section, time, url);
+                NewsData guardianNews = new NewsData(title, name, section, time, url);
 
                 // Add the new {@link News} to the list of news.
                 news.add(guardianNews);
